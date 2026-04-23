@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDb = require("./config/db");
 const path = require("path");
-
+const keepAlive = require("./utils/keepAlive");
 dotenv.config();
 connectDb();
 const app = express();
@@ -45,4 +45,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`the server is running at ${PORT}`);
+  keepAlive();
 });
