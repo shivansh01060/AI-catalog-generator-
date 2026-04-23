@@ -3,7 +3,7 @@ import axios from "axios";
 import { useTemplate } from "../context/TemplateContext";
 import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 function Templates() {
   const [templates, setTemplates] = useState([]);

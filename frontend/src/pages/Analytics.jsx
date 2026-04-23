@@ -18,7 +18,7 @@ import {
   RadialBar,
 } from "recharts";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 const COLORS = [
   "#6339ff",

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 function BulkGenerate() {
   const [products, setProducts] = useState([]);

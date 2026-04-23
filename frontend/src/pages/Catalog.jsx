@@ -9,7 +9,7 @@ import { useTemplate } from "../context/TemplateContext";
 import { useToast } from "../components/Toast";
 import ReviewsPanel from "../components/ReviewsPanel";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 const PAGE_SIZE = 12;
 
 function Stars({ rating }) {

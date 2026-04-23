@@ -3,7 +3,7 @@ import axios from "axios";
 import RecommendationsPopup from "../components/RecommendationsPopup";
 import { useToast } from "../components/Toast"; // ✅
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 function AddProduct() {
   const [form, setForm] = useState({

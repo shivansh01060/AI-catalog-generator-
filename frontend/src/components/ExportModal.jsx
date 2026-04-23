@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { exportCatalogPDF } from "../utils/exportPDF";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 const LAYOUT_OPTIONS = [
   {

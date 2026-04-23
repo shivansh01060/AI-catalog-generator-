@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ImageUploader from "./ImageUploader";
 
-const API = "http://localhost:5000";
+import API from "../config/api";
 
 function EditProductDrawer({ product, onClose, onUpdate }) {
   const [form, setForm] = useState({
