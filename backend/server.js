@@ -7,13 +7,7 @@ const keepAlive = require("./utils/keepAlive");
 dotenv.config();
 connectDb();
 const app = express();
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:4173",
-  "https://ai-catalog-generator-gamma.vercel.app",
-  "ai-catalog-generator-nt6o03ell-shivansh01060s-projects.vercel.app",
-  // add any other Vercel preview URLs if needed
-];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
 app.use(
   cors({
     origin: (origin, callback) => {
