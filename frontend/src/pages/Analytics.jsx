@@ -17,7 +17,6 @@ import {
   RadialBarChart,
   RadialBar,
 } from "recharts";
-
 import API from "../config/api";
 
 const COLORS = [
@@ -33,7 +32,6 @@ const COLORS = [
   "#f472b6",
 ];
 
-// Custom tooltip
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
@@ -62,10 +60,10 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 function StatCard({ label, value, sub, color, icon }) {
   return (
-    <div className="card-3d glass rounded-2xl p-5 glow-border">
+    <div className="card-3d glass rounded-2xl p-4 md:p-5 glow-border">
       <div className="flex items-start justify-between mb-3">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+          className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-lg md:text-xl"
           style={{ background: `${color}20` }}
         >
           {icon}
@@ -74,7 +72,10 @@ function StatCard({ label, value, sub, color, icon }) {
           {label}
         </span>
       </div>
-      <div className="font-display text-3xl font-bold mb-1" style={{ color }}>
+      <div
+        className="font-display text-2xl md:text-3xl font-bold mb-1"
+        style={{ color }}
+      >
         {value}
       </div>
       <div className="text-xs text-gray-500">{sub}</div>
@@ -114,20 +115,20 @@ function Analytics() {
   }
 
   return (
-    <div className="mesh-bg min-h-screen p-8">
+    <div className="mesh-bg min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold shimmer-text mb-2">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-4xl font-bold shimmer-text mb-2">
             Analytics
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm md:text-base">
             Real-time insights from your product catalog
           </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           <StatCard
             label="Total Products"
             value={data?.summary.total.toLocaleString()}
@@ -158,13 +159,13 @@ function Analytics() {
           />
         </div>
 
-        {/* Chart Tabs */}
-        <div className="flex gap-2 mb-6 flex-wrap">
+        {/* Chart Tabs — scrollable on mobile */}
+        <div className="flex gap-2 mb-5 md:mb-6 overflow-x-auto pb-1 scrollbar-none">
           {chartTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveChart(tab.id)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
               style={
                 activeChart === tab.id
                   ? {
@@ -186,20 +187,19 @@ function Analytics() {
         </div>
 
         {/* Charts */}
-        <div className="glass rounded-3xl p-6 glow-border mb-6">
-          {/* Categories Bar Chart */}
+        <div className="glass rounded-3xl p-4 md:p-6 glow-border mb-6">
           {activeChart === "categories" && (
             <div>
-              <h2 className="font-display font-bold text-white text-xl mb-1">
+              <h2 className="font-display font-bold text-white text-lg md:text-xl mb-1">
                 Top 10 Categories
               </h2>
-              <p className="text-gray-500 text-sm mb-6">
+              <p className="text-gray-500 text-xs md:text-sm mb-4 md:mb-6">
                 Product count by category
               </p>
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart
                   data={data?.categoryData}
-                  margin={{ top: 5, right: 20, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 10, left: 0, bottom: 60 }}
                 >
                   <CartesianGrid
                     strokeDasharray="3 3"
@@ -207,12 +207,12 @@ function Analytics() {
                   />
                   <XAxis
                     dataKey="name"
-                    tick={{ fill: "#9ca3af", fontSize: 11 }}
+                    tick={{ fill: "#9ca3af", fontSize: 10 }}
                     angle={-35}
                     textAnchor="end"
                     interval={0}
                   />
-                  <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} />
+                  <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} width={40} />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="count" name="Products" radius={[6, 6, 0, 0]}>
                     {data?.categoryData.map((_, i) => (
@@ -224,38 +224,34 @@ function Analytics() {
             </div>
           )}
 
-          {/* Brands Bar Chart */}
           {activeChart === "brands" && (
             <div>
-              <h2 className="font-display font-bold text-white text-xl mb-1">
-                Top 10 Brands
+              <h2 className="font-display font-bold text-white text-lg md:text-xl mb-1">
+                Top Brands
               </h2>
-              <p className="text-gray-500 text-sm mb-6">
-                Most listed brands in catalog
+              <p className="text-gray-500 text-xs md:text-sm mb-4 md:mb-6">
+                Product count by brand
               </p>
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart
                   data={data?.brandData}
-                  layout="vertical"
-                  margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                  margin={{ top: 5, right: 10, left: 0, bottom: 60 }}
                 >
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="rgba(255,255,255,0.05)"
                   />
                   <XAxis
-                    type="number"
-                    tick={{ fill: "#9ca3af", fontSize: 11 }}
-                  />
-                  <YAxis
-                    type="category"
                     dataKey="name"
-                    tick={{ fill: "#9ca3af", fontSize: 11 }}
-                    width={80}
+                    tick={{ fill: "#9ca3af", fontSize: 10 }}
+                    angle={-35}
+                    textAnchor="end"
+                    interval={0}
                   />
+                  <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} width={40} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="count" name="Products" radius={[0, 6, 6, 0]}>
-                    {data?.brandData.map((_, i) => (
+                  <Bar dataKey="count" name="Products" radius={[6, 6, 0, 0]}>
+                    {data?.brandData?.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Bar>
@@ -264,87 +260,58 @@ function Analytics() {
             </div>
           )}
 
-          {/* Price Distribution */}
           {activeChart === "price" && (
             <div>
-              <h2 className="font-display font-bold text-white text-xl mb-1">
+              <h2 className="font-display font-bold text-white text-lg md:text-xl mb-1">
                 Price Distribution
               </h2>
-              <p className="text-gray-500 text-sm mb-6">
-                How products are distributed across price ranges
+              <p className="text-gray-500 text-xs md:text-sm mb-4 md:mb-6">
+                Products by price range
               </p>
-              <div className="grid grid-cols-2 gap-6">
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart
-                    data={data?.priceData}
-                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={data?.priceData.filter((d) => d.count > 0)}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={100}
+                    paddingAngle={3}
+                    dataKey="count"
+                    nameKey="name"
                   >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.05)"
-                    />
-                    <XAxis
-                      dataKey="name"
-                      tick={{ fill: "#9ca3af", fontSize: 10 }}
-                      angle={-20}
-                      textAnchor="end"
-                    />
-                    <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="count" name="Products" radius={[6, 6, 0, 0]}>
-                      {data?.priceData.map((_, i) => (
+                    {data?.priceData
+                      .filter((d) => d.count > 0)
+                      .map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={data?.priceData.filter((d) => d.count > 0)}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={110}
-                      paddingAngle={3}
-                      dataKey="count"
-                      nameKey="name"
-                    >
-                      {data?.priceData
-                        .filter((d) => d.count > 0)
-                        .map((_, i) => (
-                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend
-                      formatter={(value) => (
-                        <span style={{ color: "#9ca3af", fontSize: "11px" }}>
-                          {value}
-                        </span>
-                      )}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend
+                    formatter={(value) => (
+                      <span style={{ color: "#9ca3af", fontSize: "11px" }}>
+                        {value}
+                      </span>
+                    )}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           )}
 
-          {/* AI Coverage Line Chart */}
           {activeChart === "coverage" && (
             <div>
-              <h2 className="font-display font-bold text-white text-xl mb-1">
+              <h2 className="font-display font-bold text-white text-lg md:text-xl mb-1">
                 AI Description Coverage
               </h2>
-              <p className="text-gray-500 text-sm mb-6">
+              <p className="text-gray-500 text-xs md:text-sm mb-4 md:mb-6">
                 Products vs AI descriptions over time
               </p>
               {data?.coverageData.length > 1 ? (
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={300}>
                   <LineChart
                     data={data?.coverageData}
-                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                    margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
                   >
                     <CartesianGrid
                       strokeDasharray="3 3"
@@ -354,7 +321,10 @@ function Analytics() {
                       dataKey="date"
                       tick={{ fill: "#9ca3af", fontSize: 10 }}
                     />
-                    <YAxis tick={{ fill: "#9ca3af", fontSize: 11 }} />
+                    <YAxis
+                      tick={{ fill: "#9ca3af", fontSize: 10 }}
+                      width={40}
+                    />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend
                       formatter={(value) => (
@@ -382,9 +352,8 @@ function Analytics() {
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
-                // Fallback: show coverage as radial chart
-                <div className="flex items-center justify-center gap-12">
-                  <ResponsiveContainer width="50%" height={300}>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                  <ResponsiveContainer width="100%" height={250}>
                     <RadialBarChart
                       cx="50%"
                       cy="50%"
@@ -414,9 +383,8 @@ function Analytics() {
                       />
                     </RadialBarChart>
                   </ResponsiveContainer>
-
                   <div className="text-center">
-                    <p className="font-display text-6xl font-bold shimmer-text">
+                    <p className="font-display text-5xl md:text-6xl font-bold shimmer-text">
                       {data?.summary.coverage}%
                     </p>
                     <p className="text-gray-400 mt-2">Coverage Rate</p>
@@ -432,16 +400,15 @@ function Analytics() {
         </div>
 
         {/* Bottom two cards */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* Category avg price */}
-          <div className="glass rounded-2xl p-6 glow-border">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="glass rounded-2xl p-4 md:p-6 glow-border">
             <h3 className="font-display font-bold text-white mb-4">
               💰 Avg Price by Category
             </h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart
                 data={data?.categoryData.slice(0, 6)}
-                margin={{ top: 5, right: 10, left: 10, bottom: 40 }}
+                margin={{ top: 5, right: 10, left: 0, bottom: 40 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -454,7 +421,7 @@ function Analytics() {
                   textAnchor="end"
                   interval={0}
                 />
-                <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} />
+                <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} width={40} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar
                   dataKey="avgPrice"
@@ -466,8 +433,7 @@ function Analytics() {
             </ResponsiveContainer>
           </div>
 
-          {/* Quick stats */}
-          <div className="glass rounded-2xl p-6 glow-border">
+          <div className="glass rounded-2xl p-4 md:p-6 glow-border">
             <h3 className="font-display font-bold text-white mb-4">
               ⚡ Quick Stats
             </h3>
@@ -513,7 +479,7 @@ function Analytics() {
                     </p>
                   </div>
                   <span
-                    className="text-xs px-2 py-1 rounded-full"
+                    className="text-xs px-2 py-1 rounded-full ml-2 text-right"
                     style={{ background: `${stat.color}20`, color: stat.color }}
                   >
                     {stat.sub}

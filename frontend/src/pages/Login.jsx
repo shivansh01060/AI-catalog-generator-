@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-
 import API from "../config/api";
 
 function Login() {
@@ -40,35 +39,36 @@ function Login() {
 
   return (
     <div className="mesh-bg min-h-screen flex items-center justify-center p-4">
-      {/* Background orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
+          className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 rounded-full opacity-10 blur-3xl"
           style={{ background: "#6339ff" }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-8 blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-56 md:w-80 h-56 md:h-80 rounded-full opacity-8 blur-3xl"
           style={{ background: "#00c8ff" }}
         />
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
             <div
-              className="w-12 h-12 rounded-2xl pulse-glow flex items-center justify-center"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-2xl pulse-glow flex items-center justify-center"
               style={{
                 background: "linear-gradient(135deg, #6339ff, #00c8ff)",
               }}
             >
-              <span className="text-white font-bold text-lg">AI</span>
+              <span className="text-white font-bold text-base md:text-lg">
+                AI
+              </span>
             </div>
-            <span className="font-display font-bold text-2xl shimmer-text">
+            <span className="font-display font-bold text-xl md:text-2xl shimmer-text">
               AICatalog
             </span>
           </div>
-          <h1 className="font-display text-3xl font-bold text-white mb-2">
+          <h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-2">
             Welcome back
           </h1>
           <p className="text-gray-400 text-sm">
@@ -77,8 +77,7 @@ function Login() {
         </div>
 
         {/* Card */}
-        <div className="glass rounded-3xl p-8 glow-border">
-          {/* Error */}
+        <div className="glass rounded-3xl p-6 md:p-8 glow-border">
           {error && (
             <div
               className="mb-4 px-4 py-3 rounded-xl text-sm font-medium"
@@ -92,7 +91,6 @@ function Login() {
             </div>
           )}
 
-          {/* Email */}
           <div className="mb-4">
             <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
               Email Address
@@ -108,7 +106,6 @@ function Login() {
             />
           </div>
 
-          {/* Password */}
           <div className="mb-6">
             <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
               Password
@@ -132,7 +129,6 @@ function Login() {
             </div>
           </div>
 
-          {/* Submit */}
           <button
             onClick={handleSubmit}
             disabled={loading}
@@ -148,7 +144,6 @@ function Login() {
             )}
           </button>
 
-          {/* Divider */}
           <div className="flex items-center gap-3 mb-4">
             <div
               className="flex-1 h-px"
@@ -161,7 +156,6 @@ function Login() {
             />
           </div>
 
-          {/* Register link */}
           <p className="text-center text-sm text-gray-400">
             Don't have an account?{" "}
             <Link
@@ -174,7 +168,6 @@ function Login() {
           </p>
         </div>
 
-        {/* Demo hint */}
         <p className="text-center text-xs text-gray-600 mt-4">
           New here? Register to get started — it's free
         </p>

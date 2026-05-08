@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
 import API from "../config/api";
 
 function BulkGenerate() {
@@ -10,7 +9,7 @@ function BulkGenerate() {
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
   const [limit, setLimit] = useState(10);
-  const [mode, setMode] = useState("auto"); // auto | manual
+  const [mode, setMode] = useState("auto");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -21,11 +20,9 @@ function BulkGenerate() {
     fetchProducts();
   }, []);
 
-  // Auto scroll to latest result
   useEffect(() => {
-    if (resultsRef.current) {
+    if (resultsRef.current)
       resultsRef.current.scrollTop = resultsRef.current.scrollHeight;
-    }
   }, [results]);
 
   const fetchProducts = async () => {
@@ -41,19 +38,12 @@ function BulkGenerate() {
     }
   };
 
-  const toggleSelect = (id) => {
+  const toggleSelect = (id) =>
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
-  };
-
-  const selectAll = () => {
-    const withoutDesc = filtered
-      .filter((p) => !p.description)
-      .map((p) => p._id);
-    setSelectedIds(withoutDesc);
-  };
-
+  const selectAll = () =>
+    setSelectedIds(filtered.filter((p) => !p.description).map((p) => p._id));
   const clearAll = () => setSelectedIds([]);
 
   const handleStart = async () => {
@@ -61,43 +51,34 @@ function BulkGenerate() {
     setDone(false);
     setResults([]);
     setProgress(0);
-
     const body =
       mode === "manual" && selectedIds.length > 0
         ? { productIds: selectedIds }
         : { limit };
-
     const totalCount = mode === "manual" ? selectedIds.length : limit;
     setTotal(totalCount);
-
     try {
       const response = await fetch(`${API}/api/generate-description/bulk`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
-
       while (true) {
         const { done: streamDone, value } = await reader.read();
         if (streamDone) break;
-
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
-        buffer = lines.pop(); // keep incomplete line
-
+        buffer = lines.pop();
         for (const line of lines) {
           if (line.trim()) {
             try {
               const result = JSON.parse(line);
               setResults((prev) => [...prev, result]);
               setProgress((prev) => prev + 1);
-            } catch (e) {
-              // skip malformed lines
-            }
+            } catch (e) {}
           }
         }
       }
@@ -112,28 +93,27 @@ function BulkGenerate() {
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
-
   const withoutDesc = products.filter((p) => !p.description).length;
   const progressPct = total > 0 ? Math.round((progress / total) * 100) : 0;
 
   return (
-    <div className="mesh-bg min-h-screen p-8">
+    <div className="mesh-bg min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold shimmer-text mb-2">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-4xl font-bold shimmer-text mb-2">
             Bulk AI Generator
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm md:text-base">
             Generate AI descriptions for multiple products at once
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {/* Left — Controls */}
           <div className="space-y-4">
             {/* Stats */}
-            <div className="glass rounded-2xl p-5 glow-border">
+            <div className="glass rounded-2xl p-4 md:p-5 glow-border">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <p
@@ -159,7 +139,7 @@ function BulkGenerate() {
             </div>
 
             {/* Mode selector */}
-            <div className="glass rounded-2xl p-5 glow-border">
+            <div className="glass rounded-2xl p-4 md:p-5 glow-border">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
                 Generation Mode
               </p>
@@ -212,7 +192,7 @@ function BulkGenerate() {
 
             {/* Auto mode — limit slider */}
             {mode === "auto" && (
-              <div className="glass rounded-2xl p-5 glow-border">
+              <div className="glass rounded-2xl p-4 md:p-5 glow-border">
                 <div className="flex justify-between items-center mb-3">
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     How many products?
@@ -229,22 +209,19 @@ function BulkGenerate() {
                   min={1}
                   max={50}
                   value={limit}
-                  onChange={(e) => setLimit(parseInt(e.target.value))}
+                  onChange={(e) => setLimit(Number(e.target.value))}
                   className="w-full accent-purple-500"
                 />
                 <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>1</span>
                   <span>50</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  ⏱ Est. time: ~{Math.ceil(limit * 1.5)} seconds
-                </p>
               </div>
             )}
 
-            {/* Manual mode — product selector */}
+            {/* Manual mode — product list */}
             {mode === "manual" && (
-              <div className="glass rounded-2xl p-5 glow-border">
+              <div className="glass rounded-2xl p-4 md:p-5 glow-border">
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Select Products ({selectedIds.length} selected)
@@ -252,17 +229,17 @@ function BulkGenerate() {
                   <div className="flex gap-2">
                     <button
                       onClick={selectAll}
-                      className="text-xs px-2 py-1 rounded-lg transition"
+                      className="text-xs px-2 py-1 rounded-lg"
                       style={{
                         background: "rgba(99,57,255,0.2)",
                         color: "#a78bfa",
                       }}
                     >
-                      Select All
+                      All
                     </button>
                     <button
                       onClick={clearAll}
-                      className="text-xs px-2 py-1 rounded-lg transition"
+                      className="text-xs px-2 py-1 rounded-lg"
                       style={{
                         background: "rgba(255,255,255,0.05)",
                         color: "#9ca3af",
@@ -272,81 +249,61 @@ function BulkGenerate() {
                     </button>
                   </div>
                 </div>
-
-                {/* Search */}
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search products..."
-                  className="input-dark w-full rounded-xl px-3 py-2 text-xs mb-3"
+                  className="input-dark w-full rounded-xl px-3 py-2 text-sm mb-3"
                 />
-
-                {/* Product list */}
-                <div className="space-y-1 max-h-48 overflow-y-auto">
+                <div
+                  className="space-y-2 overflow-y-auto"
+                  style={{ maxHeight: "200px" }}
+                >
                   {loading ? (
-                    <p className="text-gray-500 text-xs text-center py-4">
+                    <p className="text-xs text-gray-500 text-center py-4">
                       Loading...
                     </p>
+                  ) : filtered.length === 0 ? (
+                    <p className="text-xs text-gray-500 text-center py-4">
+                      No products found
+                    </p>
                   ) : (
-                    filtered.map((product) => (
+                    filtered.map((p) => (
                       <div
-                        key={product._id}
-                        onClick={() => toggleSelect(product._id)}
-                        className="flex items-center gap-3 p-2 rounded-xl cursor-pointer transition-all"
-                        style={{
-                          background: selectedIds.includes(product._id)
-                            ? "rgba(99,57,255,0.15)"
-                            : "rgba(255,255,255,0.02)",
-                          border: selectedIds.includes(product._id)
-                            ? "1px solid rgba(99,57,255,0.3)"
-                            : "1px solid transparent",
-                        }}
+                        key={p._id}
+                        onClick={() => toggleSelect(p._id)}
+                        className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all"
+                        style={
+                          selectedIds.includes(p._id)
+                            ? {
+                                background: "rgba(99,57,255,0.15)",
+                                border: "1px solid rgba(99,57,255,0.3)",
+                              }
+                            : {
+                                background: "rgba(255,255,255,0.03)",
+                                border: "1px solid rgba(255,255,255,0.05)",
+                              }
+                        }
                       >
-                        {/* Checkbox */}
                         <div
-                          className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
-                          style={{
-                            background: selectedIds.includes(product._id)
-                              ? "#6339ff"
-                              : "rgba(255,255,255,0.1)",
-                            border: "1px solid rgba(99,57,255,0.4)",
-                          }}
+                          className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${selectedIds.includes(p._id) ? "bg-purple-500" : "border border-gray-600"}`}
                         >
-                          {selectedIds.includes(product._id) && (
+                          {selectedIds.includes(p._id) && (
                             <span className="text-white text-xs">✓</span>
                           )}
                         </div>
-
-                        {/* Product info */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-white line-clamp-1">
-                            {product.name}
+                          <p className="text-xs font-medium text-white truncate">
+                            {p.name}
                           </p>
-                          <p className="text-xs text-gray-600">
-                            {product.brand}
-                          </p>
+                          <p className="text-xs text-gray-500">{p.category}</p>
                         </div>
-
-                        {/* Status */}
-                        {product.description ? (
+                        {p.description && (
                           <span
-                            className="text-xs px-1.5 py-0.5 rounded-full flex-shrink-0"
-                            style={{
-                              background: "rgba(16,185,129,0.15)",
-                              color: "#34d399",
-                            }}
+                            className="text-xs flex-shrink-0"
+                            style={{ color: "#10b981" }}
                           >
                             ✓
-                          </span>
-                        ) : (
-                          <span
-                            className="text-xs px-1.5 py-0.5 rounded-full flex-shrink-0"
-                            style={{
-                              background: "rgba(255,60,120,0.15)",
-                              color: "#ff3c78",
-                            }}
-                          >
-                            —
                           </span>
                         )}
                       </div>
@@ -362,7 +319,7 @@ function BulkGenerate() {
               disabled={
                 running || (mode === "manual" && selectedIds.length === 0)
               }
-              className="btn-neon w-full text-white py-4 rounded-2xl font-bold text-base disabled:opacity-50 flex items-center justify-center gap-3"
+              className="btn-neon w-full text-white py-4 rounded-2xl font-bold text-sm md:text-base disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {running ? (
                 <>
@@ -371,10 +328,10 @@ function BulkGenerate() {
                 </>
               ) : (
                 <>
-                  🤖 Start Bulk Generation
+                  🤖 Start Bulk Generation{" "}
                   {mode === "auto"
-                    ? ` (${limit} products)`
-                    : ` (${selectedIds.length} selected)`}
+                    ? `(${limit} products)`
+                    : `(${selectedIds.length} selected)`}
                 </>
               )}
             </button>
@@ -382,10 +339,9 @@ function BulkGenerate() {
 
           {/* Right — Live Results */}
           <div
-            className="glass rounded-2xl p-5 glow-border flex flex-col"
-            style={{ minHeight: "500px" }}
+            className="glass rounded-2xl p-4 md:p-5 glow-border flex flex-col"
+            style={{ minHeight: "400px" }}
           >
-            {/* Results header */}
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-bold text-white">
                 Live Results
@@ -409,7 +365,6 @@ function BulkGenerate() {
               )}
             </div>
 
-            {/* Progress bar */}
             {(running || done) && total > 0 && (
               <div className="mb-4">
                 <div className="flex justify-between text-xs text-gray-500 mb-1">
@@ -433,14 +388,13 @@ function BulkGenerate() {
               </div>
             )}
 
-            {/* Results stream */}
             <div
               ref={resultsRef}
               className="flex-1 space-y-3 overflow-y-auto"
               style={{ maxHeight: "400px" }}
             >
               {results.length === 0 && !running && (
-                <div className="flex flex-col items-center justify-center h-full text-center py-16">
+                <div className="flex flex-col items-center justify-center h-full text-center py-12">
                   <p className="text-4xl mb-3">🤖</p>
                   <p className="text-gray-400 text-sm">
                     Results will appear here as they generate
@@ -450,8 +404,7 @@ function BulkGenerate() {
                   </p>
                 </div>
               )}
-
-              {results.map((result, i) => (
+              {results.map((result) => (
                 <div
                   key={result._id}
                   className="rounded-2xl p-4"
@@ -465,13 +418,7 @@ function BulkGenerate() {
                     animation: "slideIn 0.3s ease",
                   }}
                 >
-                  <style>{`
-                    @keyframes slideIn {
-                      from { transform: translateY(10px); opacity: 0; }
-                      to { transform: translateY(0); opacity: 1; }
-                    }
-                  `}</style>
-
+                  <style>{`@keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }`}</style>
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <p className="text-sm font-bold text-white line-clamp-1">
                       {result.name}
@@ -498,7 +445,6 @@ function BulkGenerate() {
                       </span>
                     )}
                   </div>
-
                   {result.success ? (
                     <p className="text-xs text-gray-400 leading-relaxed line-clamp-3">
                       {result.description}
@@ -510,8 +456,6 @@ function BulkGenerate() {
                   )}
                 </div>
               ))}
-
-              {/* Loading indicator for next item */}
               {running && (
                 <div
                   className="rounded-2xl p-4 flex items-center gap-3"
@@ -528,7 +472,6 @@ function BulkGenerate() {
               )}
             </div>
 
-            {/* Summary */}
             {done && results.length > 0 && (
               <div
                 className="mt-4 pt-4"

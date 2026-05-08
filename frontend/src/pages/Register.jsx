@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-
 import API from "../config/api";
 
 function Register() {
@@ -34,7 +33,6 @@ function Register() {
       setError("Passwords do not match");
       return;
     }
-
     setLoading(true);
     setError("");
     try {
@@ -52,7 +50,6 @@ function Register() {
     }
   };
 
-  // Password strength
   const getStrength = (pass) => {
     if (!pass) return { label: "", color: "", width: "0%" };
     if (pass.length < 6)
@@ -65,7 +62,6 @@ function Register() {
   };
 
   const strength = getStrength(form.password);
-
   const fields = [
     { name: "name", label: "Full Name", placeholder: "John Doe", type: "text" },
     {
@@ -78,35 +74,36 @@ function Register() {
 
   return (
     <div className="mesh-bg min-h-screen flex items-center justify-center p-4">
-      {/* Background orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
+          className="absolute top-1/4 right-1/4 w-64 md:w-96 h-64 md:h-96 rounded-full opacity-10 blur-3xl"
           style={{ background: "#6339ff" }}
         />
         <div
-          className="absolute bottom-1/3 left-1/4 w-72 h-72 rounded-full opacity-8 blur-3xl"
+          className="absolute bottom-1/3 left-1/4 w-56 md:w-72 h-56 md:h-72 rounded-full opacity-8 blur-3xl"
           style={{ background: "#ff3c78" }}
         />
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
             <div
-              className="w-12 h-12 rounded-2xl pulse-glow flex items-center justify-center"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-2xl pulse-glow flex items-center justify-center"
               style={{
                 background: "linear-gradient(135deg, #6339ff, #00c8ff)",
               }}
             >
-              <span className="text-white font-bold text-lg">AI</span>
+              <span className="text-white font-bold text-base md:text-lg">
+                AI
+              </span>
             </div>
-            <span className="font-display font-bold text-2xl shimmer-text">
+            <span className="font-display font-bold text-xl md:text-2xl shimmer-text">
               AICatalog
             </span>
           </div>
-          <h1 className="font-display text-3xl font-bold text-white mb-2">
+          <h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-2">
             Create account
           </h1>
           <p className="text-gray-400 text-sm">
@@ -115,8 +112,7 @@ function Register() {
         </div>
 
         {/* Card */}
-        <div className="glass rounded-3xl p-8 glow-border">
-          {/* Error */}
+        <div className="glass rounded-3xl p-6 md:p-8 glow-border">
           {error && (
             <div
               className="mb-4 px-4 py-3 rounded-xl text-sm font-medium"
@@ -130,7 +126,6 @@ function Register() {
             </div>
           )}
 
-          {/* Name + Email fields */}
           {fields.map((f) => (
             <div key={f.name} className="mb-4">
               <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
@@ -147,7 +142,6 @@ function Register() {
             </div>
           ))}
 
-          {/* Password */}
           <div className="mb-2">
             <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
               Password
@@ -170,7 +164,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Password strength bar */}
           {form.password && (
             <div className="mb-4">
               <div
@@ -188,7 +181,6 @@ function Register() {
             </div>
           )}
 
-          {/* Confirm password */}
           <div className="mb-6">
             <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
               Confirm Password
@@ -202,13 +194,9 @@ function Register() {
               className="input-dark w-full rounded-xl px-4 py-3 text-sm"
               style={
                 form.confirm && form.confirm !== form.password
-                  ? {
-                      borderColor: "rgba(239,68,68,0.5)",
-                    }
+                  ? { borderColor: "rgba(239,68,68,0.5)" }
                   : form.confirm && form.confirm === form.password
-                    ? {
-                        borderColor: "rgba(16,185,129,0.5)",
-                      }
+                    ? { borderColor: "rgba(16,185,129,0.5)" }
                     : {}
               }
             />
@@ -219,7 +207,6 @@ function Register() {
             )}
           </div>
 
-          {/* Submit */}
           <button
             onClick={handleSubmit}
             disabled={loading}

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import RecommendationsPopup from "../components/RecommendationsPopup";
-import { useToast } from "../components/Toast"; // ✅
-
+import { useToast } from "../components/Toast";
 import API from "../config/api";
 
 function AddProduct() {
@@ -21,7 +20,7 @@ function AddProduct() {
   const [loading, setLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const { showToast, ToastComponent } = useToast(); // ✅
+  const { showToast, ToastComponent } = useToast();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,8 +35,7 @@ function AddProduct() {
       const res = await axios.post(`${API}/api/products`, form);
       setProductId(res.data._id);
       setProductName(res.data.name);
-      showToast("Product saved successfully!", "success"); // ✅
-
+      showToast("Product saved successfully!", "success");
       const recRes = await axios.post(`${API}/api/recommend`, {
         productId: res.data._id,
       });
@@ -50,7 +48,7 @@ function AddProduct() {
         setShowPopup(true);
       }
     } catch (err) {
-      showToast("Error saving product", "error"); // ✅
+      showToast("Error saving product", "error");
     } finally {
       setLoading(false);
     }
@@ -59,15 +57,15 @@ function AddProduct() {
   const handleGenerate = async () => {
     if (!productId) return;
     setDescLoading(true);
-    showToast("Generating AI description...", "loading"); // ✅
+    showToast("Generating AI description...", "loading");
     try {
       const res = await axios.post(`${API}/api/generate-description`, {
         productId,
       });
       setDescription(res.data.description);
-      showToast("Description generated!", "success"); // ✅
+      showToast("Description generated!", "success");
     } catch (err) {
-      showToast("Error generating description", "error"); // ✅
+      showToast("Error generating description", "error");
     } finally {
       setDescLoading(false);
     }
@@ -79,16 +77,8 @@ function AddProduct() {
       label: "Product Name",
       placeholder: "e.g. Samsung Galaxy M34",
     },
-    {
-      name: "category",
-      label: "Category",
-      placeholder: "e.g. Smartphones",
-    },
-    {
-      name: "brand",
-      label: "Brand",
-      placeholder: "e.g. Samsung",
-    },
+    { name: "category", label: "Category", placeholder: "e.g. Smartphones" },
+    { name: "brand", label: "Brand", placeholder: "e.g. Samsung" },
     {
       name: "price",
       label: "Price (₹)",
@@ -98,20 +88,20 @@ function AddProduct() {
   ];
 
   return (
-    <div className="mesh-bg min-h-screen p-8">
+    <div className="mesh-bg min-h-screen p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold shimmer-text mb-2">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-4xl font-bold shimmer-text mb-2">
             Add New Product
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm md:text-base">
             Fill in the details and let AI do the rest
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="glass rounded-3xl p-8 mb-6 glow-border">
-          <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="glass rounded-3xl p-4 md:p-8 mb-6 glow-border">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {fields.map((f) => (
               <div key={f.name}>
                 <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
@@ -143,20 +133,20 @@ function AddProduct() {
             />
           </div>
 
-          <div className="flex gap-4 mt-6">
+          <div className="flex flex-wrap gap-3 mt-6">
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="btn-neon text-white px-6 py-3 rounded-xl font-medium text-sm disabled:opacity-50"
+              className="btn-neon text-white px-5 py-3 rounded-xl font-medium text-sm disabled:opacity-50 flex-1 sm:flex-none"
             >
-              {loading ? "⏳ Saving + Finding Similar..." : "💾 Save Product"}
+              {loading ? "⏳ Saving..." : "💾 Save Product"}
             </button>
 
             {productId && (
               <button
                 onClick={handleGenerate}
                 disabled={descLoading}
-                className="text-white px-6 py-3 rounded-xl font-medium text-sm disabled:opacity-50 transition"
+                className="text-white px-5 py-3 rounded-xl font-medium text-sm disabled:opacity-50 transition flex-1 sm:flex-none"
                 style={{
                   background: "rgba(99,57,255,0.3)",
                   border: "1px solid rgba(99,57,255,0.4)",
@@ -171,7 +161,7 @@ function AddProduct() {
             {recommendations.length > 0 && (
               <button
                 onClick={() => setShowPopup(true)}
-                className="text-white px-6 py-3 rounded-xl font-medium text-sm transition"
+                className="text-white px-5 py-3 rounded-xl font-medium text-sm transition flex-1 sm:flex-none"
                 style={{
                   background: "rgba(0,200,255,0.15)",
                   border: "1px solid rgba(0,200,255,0.3)",
@@ -187,7 +177,7 @@ function AddProduct() {
         {/* AI Description */}
         {description && (
           <div
-            className="glass rounded-3xl p-6 mb-6"
+            className="glass rounded-3xl p-4 md:p-6 mb-6"
             style={{
               borderLeft: "3px solid #6339ff",
               boxShadow: "0 0 30px rgba(99,57,255,0.15)",
@@ -198,15 +188,15 @@ function AddProduct() {
                 🤖 AI Generated Description
               </span>
             </div>
-            <p className="text-gray-200 leading-relaxed">{description}</p>
+            <p className="text-gray-200 leading-relaxed text-sm md:text-base">
+              {description}
+            </p>
           </div>
         )}
 
-        {/* ✅ Toast */}
         {ToastComponent}
       </div>
 
-      {/* Recommendations Popup */}
       {showPopup && (
         <RecommendationsPopup
           aiRecommendations={aiRecommendations}

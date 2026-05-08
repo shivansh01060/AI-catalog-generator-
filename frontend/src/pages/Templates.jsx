@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTemplate } from "../context/TemplateContext";
 import { useNavigate } from "react-router-dom";
-
 import API from "../config/api";
 
 function Templates() {
@@ -11,8 +10,8 @@ function Templates() {
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [applied, setApplied] = useState(false);
-  const { setActiveTemplate } = useTemplate(); // ✅
-  const navigate = useNavigate(); // ✅
+  const { setActiveTemplate } = useTemplate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -26,32 +25,31 @@ function Templates() {
   const filtered =
     filter === "all" ? templates : templates.filter((t) => t.layout === filter);
 
-  // ✅ Apply template and go to catalog
   const handleApply = () => {
     setActiveTemplate(selected);
     setApplied(true);
-    setTimeout(() => {
-      navigate("/catalog");
-    }, 800);
+    setTimeout(() => navigate("/catalog"), 800);
   };
 
   return (
-    <div className="mesh-bg min-h-screen p-8">
+    <div className="mesh-bg min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold shimmer-text mb-1">
+        <div className="mb-6 md:mb-8">
+          <h1 className="font-display text-2xl md:text-4xl font-bold shimmer-text mb-1">
             Catalog Templates
           </h1>
-          <p className="text-gray-400">100 professional designs — pick yours</p>
+          <p className="text-gray-400 text-sm md:text-base">
+            100 professional designs — pick yours
+          </p>
         </div>
 
-        {/* Filter tabs */}
-        <div className="flex gap-2 mb-8 flex-wrap">
+        {/* Filter tabs — scrollable on mobile */}
+        <div className="flex gap-2 mb-6 md:mb-8 overflow-x-auto pb-1 scrollbar-none">
           {layouts.map((layout) => (
             <button
               key={layout}
               onClick={() => setFilter(layout)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium capitalize transition-all ${
+              className={`px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-medium capitalize transition-all whitespace-nowrap flex-shrink-0 ${
                 filter === layout
                   ? "text-white glow-border"
                   : "text-gray-400 hover:text-white"
@@ -72,10 +70,10 @@ function Templates() {
 
         {loading ? (
           <div className="text-center py-32">
-            <div className="w-12 h-12 rounded-full border-2 border-purple-500 border-t-transparent animate-spin mx-auto"></div>
+            <div className="w-12 h-12 rounded-full border-2 border-purple-500 border-t-transparent animate-spin mx-auto" />
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
             {filtered.map((template) => (
               <div
                 key={template.id}
@@ -89,7 +87,7 @@ function Templates() {
               >
                 {/* Preview */}
                 <div
-                  className="h-28 flex items-center justify-center relative overflow-hidden"
+                  className="h-24 md:h-28 flex items-center justify-center relative overflow-hidden"
                   style={{ backgroundColor: template.theme.bg }}
                 >
                   <div
@@ -100,14 +98,14 @@ function Templates() {
                   />
                   <div className="relative text-center">
                     <div
-                      className="w-10 h-10 rounded-xl mx-auto mb-2 float"
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-xl mx-auto mb-2 float"
                       style={{
                         background: template.theme.primary,
                         boxShadow: `0 8px 20px ${template.theme.primary}60`,
                       }}
                     />
                     <div
-                      className="w-16 h-1.5 rounded-full mx-auto mb-1"
+                      className="w-14 md:w-16 h-1.5 rounded-full mx-auto mb-1"
                       style={{ background: template.theme.secondary }}
                     />
                     <div
@@ -121,7 +119,10 @@ function Templates() {
                 </div>
 
                 {/* Info */}
-                <div className="p-3" style={{ background: "rgba(0,0,0,0.4)" }}>
+                <div
+                  className="p-2 md:p-3"
+                  style={{ background: "rgba(0,0,0,0.4)" }}
+                >
                   <p className="text-xs font-bold text-white truncate">
                     {template.theme.name}
                   </p>
@@ -145,19 +146,19 @@ function Templates() {
           </div>
         )}
 
-        {/* Selected panel */}
+        {/* Selected panel — bottom sheet on mobile, fixed card on desktop */}
         {selected && (
           <div
-            className="fixed bottom-6 right-6 glass rounded-2xl p-6 w-72 glow-border"
+            className="fixed bottom-0 left-0 right-0 md:bottom-6 md:left-auto md:right-6 glass md:rounded-2xl rounded-t-2xl p-4 md:p-6 md:w-72 glow-border"
             style={{ zIndex: 100 }}
           >
             <h3 className="font-display font-bold text-white mb-1">
               {selected.name}
             </h3>
-            <p className="text-xs text-gray-400 capitalize mb-4">
+            <p className="text-xs text-gray-400 capitalize mb-3 md:mb-4">
               {selected.layout} layout • {selected.theme.name}
             </p>
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-3 md:mb-4">
               {[
                 selected.theme.primary,
                 selected.theme.secondary,
@@ -165,19 +166,31 @@ function Templates() {
               ].map((c, i) => (
                 <div
                   key={i}
-                  className="w-7 h-7 rounded-full border border-white/10"
+                  className="w-6 h-6 md:w-7 md:h-7 rounded-full border border-white/10"
                   style={{ backgroundColor: c }}
                 />
               ))}
             </div>
-            <button
-              onClick={handleApply}
-              className="btn-neon w-full text-white py-2.5 rounded-xl text-sm font-medium"
-            >
-              {applied ? "✅ Applying..." : "🎨 Apply Template"}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSelected(null)}
+                className="py-2.5 px-3 rounded-xl text-sm text-gray-400 flex-shrink-0"
+                style={{ background: "rgba(255,255,255,0.05)" }}
+              >
+                ✕
+              </button>
+              <button
+                onClick={handleApply}
+                className="btn-neon flex-1 text-white py-2.5 rounded-xl text-sm font-medium"
+              >
+                {applied ? "✅ Applying..." : "🎨 Apply Template"}
+              </button>
+            </div>
           </div>
         )}
+
+        {/* Spacer so content isn't hidden behind bottom sheet on mobile */}
+        {selected && <div className="h-36 md:h-0" />}
       </div>
     </div>
   );

@@ -7,12 +7,12 @@ import API from "../config/api";
 function StatCard({ label, value, sub, color, icon, delay }) {
   return (
     <div
-      className="card-3d glass rounded-2xl p-6 glow-border"
+      className="card-3d glass rounded-2xl p-4 md:p-6 glow-border"
       style={{ animationDelay: `${delay}s` }}
     >
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-3 md:mb-4">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+          className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-lg md:text-xl"
           style={{ background: `${color}20` }}
         >
           {icon}
@@ -21,7 +21,10 @@ function StatCard({ label, value, sub, color, icon, delay }) {
           {label}
         </span>
       </div>
-      <div className="font-display text-3xl font-bold mb-1" style={{ color }}>
+      <div
+        className="font-display text-2xl md:text-3xl font-bold mb-1"
+        style={{ color }}
+      >
         {value}
       </div>
       <div className="text-xs text-gray-500">{sub}</div>
@@ -68,21 +71,21 @@ function Dashboard() {
   const timeSavedHours = stats ? Math.round(stats.timeSavedMinutes / 60) : 0;
 
   return (
-    <div className="mesh-bg min-h-screen p-8">
+    <div className="mesh-bg min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Hero */}
-        <div className="text-center mb-12 pt-4">
-          <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-xs text-gray-400 mb-6 glow-border">
+        <div className="text-center mb-8 md:mb-12 pt-4">
+          <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-xs text-gray-400 mb-4 md:mb-6 glow-border">
             <span
               className="w-2 h-2 rounded-full bg-green-400"
               style={{ animation: "pulse 2s infinite" }}
             ></span>
             All systems operational
           </div>
-          <h1 className="font-display text-6xl font-bold mb-4 shimmer-text">
+          <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 shimmer-text">
             AI Catalog Generator
           </h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto">
+          <p className="text-gray-400 text-sm md:text-lg max-w-xl mx-auto px-4">
             Real-time metrics for your AI-powered product catalog
           </p>
         </div>
@@ -95,11 +98,11 @@ function Dashboard() {
         ) : (
           <>
             {/* Main Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
               <StatCard
                 label="Total Products"
                 value={stats?.totalProducts.toLocaleString()}
-                sub="From Flipkart dataset"
+                sub="From Your Catalog "
                 color="#6339ff"
                 icon="◈"
                 delay={0}
@@ -131,7 +134,7 @@ function Dashboard() {
             </div>
 
             {/* Second row */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
               <StatCard
                 label="Avg Price"
                 value={`₹${stats?.avgPrice.toLocaleString()}`}
@@ -159,10 +162,10 @@ function Dashboard() {
             </div>
 
             {/* Progress + Features row */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
               {/* Description Coverage */}
-              <div className="glass rounded-2xl p-6 glow-border">
-                <h3 className="font-display font-bold text-white mb-6">
+              <div className="glass rounded-2xl p-4 md:p-6 glow-border">
+                <h3 className="font-display font-bold text-white mb-4 md:mb-6">
                   📊 Catalog Coverage
                 </h3>
                 <ProgressBar
@@ -186,11 +189,11 @@ function Dashboard() {
               </div>
 
               {/* Performance Metrics */}
-              <div className="glass rounded-2xl p-6 glow-border">
-                <h3 className="font-display font-bold text-white mb-6">
+              <div className="glass rounded-2xl p-4 md:p-6 glow-border">
+                <h3 className="font-display font-bold text-white mb-4 md:mb-6">
                   ⚡ Performance Metrics
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {[
                     {
                       label: "AI Description Speed",
@@ -213,11 +216,11 @@ function Dashboard() {
                   ].map((m, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between p-3 rounded-xl"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-xl"
                       style={{ background: "rgba(255,255,255,0.03)" }}
                     >
                       <span className="text-xs text-gray-400">{m.label}</span>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span
                           className="text-xs px-2 py-1 rounded-full"
                           style={{ background: `${m.color}20`, color: m.color }}
@@ -241,11 +244,11 @@ function Dashboard() {
             </div>
 
             {/* Quick Actions */}
-            <div className="glass rounded-2xl p-6 glow-border">
+            <div className="glass rounded-2xl p-4 md:p-6 glow-border">
               <h3 className="font-display font-bold text-white mb-4">
                 🚀 Quick Actions
               </h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                 <Link
                   to="/add"
                   className="btn-neon text-white py-3 px-4 rounded-xl text-sm font-medium text-center"
