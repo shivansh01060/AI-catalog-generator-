@@ -145,7 +145,7 @@ function Dashboard() {
               />
               <StatCard
                 label="Time Saved"
-                value={`${timeSavedHours}h`}
+                value={`${timeSavedHours}hrs`}
                 sub="vs manual writing (17 min each)"
                 color="#a78bfa"
                 icon="⚡"

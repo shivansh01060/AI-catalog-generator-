@@ -12,18 +12,18 @@ function RecommendationsPopup({
         style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)" }}
         onClick={onClose}
       />
-      {/* Flex centering wrapper */}
+
+      {/* Bottom sheet on mobile, centered modal on desktop */}
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed z-50
+                    bottom-0 left-0 right-0 rounded-t-3xl
+                    md:inset-0 md:flex md:items-center md:justify-center md:p-4 md:bottom-auto md:left-auto md:right-auto md:rounded-none md:bg-transparent"
         style={{ pointerEvents: "none" }}
       >
-        {/* Popup */}
         <div
-          className="glass rounded-3xl p-8"
+          className="glass rounded-t-3xl md:rounded-3xl p-5 md:p-8 w-full md:max-w-[680px]"
           style={{
-            width: "100%",
-            maxWidth: "680px",
-            maxHeight: "85vh",
+            maxHeight: "90vh",
             overflowX: "hidden",
             overflowY: "auto",
             border: "1px solid rgba(99,57,255,0.4)",
@@ -34,27 +34,44 @@ function RecommendationsPopup({
         >
           <style>{`
             @keyframes popIn {
-              from { transform: scale(0.85); opacity: 0; }
-              to { transform: scale(1); opacity: 1; }
+              from { transform: translateY(40px); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+            @media (min-width: 768px) {
+              @keyframes popIn {
+                from { transform: scale(0.85); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+              }
             }
           `}</style>
 
+          {/* Mobile drag handle */}
+          <div className="md:hidden flex justify-center mb-4">
+            <div
+              className="w-10 h-1 rounded-full"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            />
+          </div>
+
           {/* Header */}
-          <div className="flex items-start justify-between mb-6">
-            <div>
+          <div className="flex items-start justify-between mb-5 md:mb-6 gap-3">
+            <div className="min-w-0">
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs mb-2"
-                style={{ background: "rgba(99,57,255,0.2)", color: "#a78bfa" }}
+                style={{
+                  background: "rgba(99,57,255,0.2)",
+                  color: "#a78bfa",
+                }}
               >
                 🎯 Smart Recommendations
               </div>
-              <h2 className="font-display font-bold text-white text-xl">
-                Similar to "{productName?.substring(0, 35)}"
+              <h2 className="font-display font-bold text-white text-lg md:text-xl leading-tight">
+                Similar to "{productName?.substring(0, 30)}"
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition flex-shrink-0 active:scale-95"
               style={{ background: "rgba(255,255,255,0.05)" }}
             >
               ✕
@@ -63,7 +80,7 @@ function RecommendationsPopup({
 
           {/* Section 1 — AI Suggestions */}
           {aiRecommendations?.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-5 md:mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <span
                   className="text-xs font-bold uppercase tracking-wider"
@@ -71,7 +88,7 @@ function RecommendationsPopup({
                 >
                   🤖 AI Suggested
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 hidden sm:inline">
                   — Works for any product
                 </span>
               </div>
@@ -80,7 +97,7 @@ function RecommendationsPopup({
                 {aiRecommendations.map((rec, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-4 p-4 rounded-2xl"
+                    className="flex items-center gap-3 p-3 md:p-4 rounded-2xl"
                     style={{
                       background: "rgba(99,57,255,0.06)",
                       border: "1px solid rgba(99,57,255,0.15)",
@@ -100,7 +117,7 @@ function RecommendationsPopup({
 
                     {/* Avatar */}
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold"
                       style={{
                         background: `linear-gradient(135deg,
                           hsl(${(i * 55 + 200) % 360}, 70%, 35%),
@@ -118,7 +135,10 @@ function RecommendationsPopup({
                       <p className="text-xs text-gray-500 mt-0.5">
                         {rec.brand}
                       </p>
-                      <p className="text-xs mt-1" style={{ color: "#a78bfa" }}>
+                      <p
+                        className="text-xs mt-1 line-clamp-1"
+                        style={{ color: "#a78bfa" }}
+                      >
                         💡 {rec.reason}
                       </p>
                     </div>
@@ -138,7 +158,7 @@ function RecommendationsPopup({
                           color: "#a78bfa",
                         }}
                       >
-                        {rec.matchScore}% match
+                        {rec.matchScore}%
                       </span>
                     </div>
                   </div>
@@ -154,7 +174,9 @@ function RecommendationsPopup({
                 className="flex-1 h-px"
                 style={{ background: "rgba(255,255,255,0.06)" }}
               />
-              <span className="text-xs text-gray-500">From your catalog</span>
+              <span className="text-xs text-gray-500 whitespace-nowrap">
+                From your catalog
+              </span>
               <div
                 className="flex-1 h-px"
                 style={{ background: "rgba(255,255,255,0.06)" }}
@@ -162,9 +184,9 @@ function RecommendationsPopup({
             </div>
           )}
 
-          {/* Section 2 — Dataset Matches */}
+          {/* Section 2 — Catalog Matches */}
           {recommendations?.length > 0 && (
-            <div className="mb-6">
+            <div className="mb-5 md:mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <span
                   className="text-xs font-bold uppercase tracking-wider"
@@ -172,7 +194,7 @@ function RecommendationsPopup({
                 >
                   ◈ Catalog Matches
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 hidden sm:inline">
                   — From your 19k products
                 </span>
               </div>
@@ -181,7 +203,7 @@ function RecommendationsPopup({
                 {recommendations.map((rec, i) => (
                   <div
                     key={rec._id}
-                    className="flex items-center gap-4 p-4 rounded-2xl"
+                    className="flex items-center gap-3 p-3 md:p-4 rounded-2xl"
                     style={{
                       background: "rgba(0,200,255,0.04)",
                       border: "1px solid rgba(0,200,255,0.1)",
@@ -199,7 +221,7 @@ function RecommendationsPopup({
                     </div>
 
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold"
                       style={{
                         background: `linear-gradient(135deg,
                           hsl(${(i * 45 + 180) % 360}, 60%, 30%),
@@ -213,11 +235,11 @@ function RecommendationsPopup({
                       <p className="font-medium text-white text-sm line-clamp-1">
                         {rec.name}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
                         {rec.brand} • {rec.category?.substring(0, 20)}
                       </p>
                       {rec.description && (
-                        <p className="text-xs mt-1 text-gray-600 line-clamp-1">
+                        <p className="text-xs mt-1 text-gray-600 line-clamp-1 hidden sm:block">
                           {rec.description}
                         </p>
                       )}
@@ -256,15 +278,19 @@ function RecommendationsPopup({
             </p>
             <button
               onClick={onClose}
-              className="btn-neon w-full text-white py-3 rounded-xl font-medium text-sm"
+              className="btn-neon w-full text-white py-3 rounded-xl font-medium text-sm active:scale-95 transition-transform"
             >
               Got it ✓
             </button>
           </div>
-        </div>{" "}
-        {/* closes popup */}
-      </div>{" "}
-      {/* closes flex wrapper */}
+
+          {/* Safe area spacer for mobile */}
+          <div
+            className="h-safe-area-inset-bottom md:hidden"
+            style={{ height: "env(safe-area-inset-bottom, 8px)" }}
+          />
+        </div>
+      </div>
     </>
   );
 }

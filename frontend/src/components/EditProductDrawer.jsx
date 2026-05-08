@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ImageUploader from "./ImageUploader";
-
 import API from "../config/api";
 
 function EditProductDrawer({ product, onClose, onUpdate }) {
@@ -17,7 +16,6 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
   const [message, setMessage] = useState("");
   const [description, setDescription] = useState("");
 
-  // Fill form when product changes
   useEffect(() => {
     if (product) {
       setForm({
@@ -36,13 +34,12 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Save edited product
   const handleSave = async () => {
     setLoading(true);
     setMessage("");
     try {
       const res = await axios.put(`${API}/api/products/${product._id}`, form);
-      onUpdate(res.data); // update parent state
+      onUpdate(res.data);
       setMessage("✅ Product updated!");
     } catch (err) {
       setMessage("❌ Error updating product");
@@ -51,7 +48,6 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
     }
   };
 
-  // Regenerate AI description
   const handleRegenerate = async () => {
     setDescLoading(true);
     try {
@@ -78,11 +74,11 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
         onClick={onClose}
       />
 
-      {/* Drawer */}
+      {/* Drawer — full screen on mobile, 480px panel on desktop */}
       <div
-        className="fixed right-0 top-0 h-full z-50 overflow-y-auto"
+        className="fixed right-0 top-0 h-full z-50 overflow-y-auto
+                    w-full sm:w-[480px]"
         style={{
-          width: "480px",
           background: "linear-gradient(180deg, #0d0d1a 0%, #060612 100%)",
           borderLeft: "1px solid rgba(99,57,255,0.3)",
           boxShadow: "-20px 0 60px rgba(99,57,255,0.15)",
@@ -98,25 +94,31 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
 
         {/* Header */}
         <div
-          className="flex items-center justify-between p-6"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+          className="flex items-center justify-between p-4 md:p-6 sticky top-0 z-10"
+          style={{
+            borderBottom: "1px solid rgba(255,255,255,0.06)",
+            background: "linear-gradient(180deg, #0d0d1a 0%, #0d0d1aee 100%)",
+          }}
         >
           <div>
-            <h2 className="font-display font-bold text-white text-xl">
+            <h2 className="font-display font-bold text-white text-lg md:text-xl">
               Edit Product
             </h2>
-            <p className="text-gray-500 text-xs mt-1">Update product details</p>
+            <p className="text-gray-500 text-xs mt-0.5">
+              Update product details
+            </p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition flex-shrink-0"
             style={{ background: "rgba(255,255,255,0.05)" }}
           >
             ✕
           </button>
         </div>
+
         {/* Image Upload Section */}
-        <div className="p-6 pb-0">
+        <div className="p-4 md:p-6 pb-0">
           <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
             Product Image
           </label>
@@ -127,8 +129,9 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
             primary="#6339ff"
           />
         </div>
+
         {/* Form */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 md:p-6 space-y-4">
           {/* Name */}
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
@@ -143,7 +146,7 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
           </div>
 
           {/* Category + Brand */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">
                 Category
@@ -178,6 +181,7 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
               value={form.price}
               onChange={handleChange}
               type="number"
+              inputMode="numeric"
               className="input-dark w-full rounded-xl px-4 py-3 text-sm"
             />
           </div>
@@ -200,9 +204,7 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
           {message && (
             <p
               className="text-sm"
-              style={{
-                color: message.includes("✅") ? "#4ade80" : "#f87171",
-              }}
+              style={{ color: message.includes("✅") ? "#4ade80" : "#f87171" }}
             >
               {message}
             </p>
@@ -212,7 +214,7 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
           <button
             onClick={handleSave}
             disabled={loading}
-            className="btn-neon w-full text-white py-3 rounded-xl font-medium text-sm disabled:opacity-50"
+            className="btn-neon w-full text-white py-3 rounded-xl font-medium text-sm disabled:opacity-50 active:scale-95 transition-transform"
           >
             {loading ? "Saving..." : "💾 Save Changes"}
           </button>
@@ -230,7 +232,7 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
             />
           </div>
 
-          {/* AI Description section */}
+          {/* AI Description */}
           <div
             className="rounded-2xl p-4"
             style={{
@@ -238,20 +240,19 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
               border: "1px solid rgba(99,57,255,0.2)",
             }}
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3 gap-2">
               <span className="text-xs font-medium text-purple-400 uppercase tracking-wider">
                 🤖 AI Description
               </span>
               <button
                 onClick={handleRegenerate}
                 disabled={descLoading}
-                className="text-xs px-3 py-1.5 rounded-lg font-medium transition disabled:opacity-50"
+                className="text-xs px-3 py-1.5 rounded-lg font-medium transition disabled:opacity-50 flex-shrink-0 active:scale-95"
                 style={{ background: "rgba(99,57,255,0.3)", color: "#a78bfa" }}
               >
                 {descLoading ? "Generating..." : "✨ Regenerate"}
               </button>
             </div>
-
             {description ? (
               <p className="text-gray-300 text-sm leading-relaxed">
                 {description}
@@ -262,6 +263,9 @@ function EditProductDrawer({ product, onClose, onUpdate }) {
               </p>
             )}
           </div>
+
+          {/* Bottom safe-area spacer for mobile */}
+          <div className="h-4 md:h-0" />
         </div>
       </div>
     </>

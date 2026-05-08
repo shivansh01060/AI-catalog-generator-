@@ -17,16 +17,17 @@ function Toast({ message, type, onClose }) {
 
   return (
     <div
-      className="fixed z-50 flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl"
+      className="fixed z-50 flex items-center gap-3 px-4 py-3 md:px-5 md:py-4 rounded-2xl shadow-2xl mx-4 md:mx-0"
       style={{
-        bottom: "24px",
+        bottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
         left: "50%",
         transform: "translateX(-50%)",
         background: style.bg,
         border: `1px solid ${style.border}`,
         backdropFilter: "blur(20px)",
-        minWidth: "280px",
-        maxWidth: "480px",
+        minWidth: "260px",
+        maxWidth: "calc(100vw - 32px)",
+        width: "max-content",
         animation: "slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
       }}
     >
@@ -40,7 +41,7 @@ function Toast({ message, type, onClose }) {
       <p className="text-sm font-medium text-white flex-1">{message}</p>
       <button
         onClick={onClose}
-        className="text-gray-400 hover:text-white transition flex-shrink-0 text-xs"
+        className="text-gray-400 hover:text-white transition flex-shrink-0 text-xs p-1 active:scale-95"
       >
         ✕
       </button>
@@ -48,7 +49,6 @@ function Toast({ message, type, onClose }) {
   );
 }
 
-// ✅ Toast Manager — add this to App.jsx
 export function useToast() {
   const [toast, setToast] = useState(null);
 

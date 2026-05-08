@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-
 import API from "../config/api";
 
 function ImageUploader({
@@ -9,7 +8,7 @@ function ImageUploader({
   onUpdate,
   primary = "#6339ff",
 }) {
-  const [mode, setMode] = useState("upload"); // upload | url
+  const [mode, setMode] = useState("upload");
   const [urlInput, setUrlInput] = useState("");
   const [preview, setPreview] = useState(currentImage || "");
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,6 @@ function ImageUploader({
     if (!file) return;
     setLoading(true);
 
-    // Show local preview immediately
     const reader = new FileReader();
     reader.onload = (e) => setPreview(e.target.result);
     reader.readAsDataURL(file);
@@ -46,10 +44,9 @@ function ImageUploader({
     if (!urlInput.trim()) return;
     setLoading(true);
     try {
-      const res = await axios.put(
-        `${API}/api/products/${productId}/image-url`,
-        { imageUrl: urlInput },
-      );
+      await axios.put(`${API}/api/products/${productId}/image-url`, {
+        imageUrl: urlInput,
+      });
       setPreview(urlInput);
       onUpdate({ imageUrl: urlInput });
       setUrlInput("");
@@ -74,8 +71,9 @@ function ImageUploader({
     >
       {/* Image Preview */}
       <div
-        className="relative h-48 flex items-center justify-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden"
         style={{
+          height: "180px",
           background: preview
             ? "transparent"
             : `linear-gradient(135deg, ${primary}15, ${primary}05)`,
@@ -89,9 +87,9 @@ function ImageUploader({
               className="w-full h-full object-cover"
               onError={() => setPreview("")}
             />
-            {/* Overlay on hover */}
+            {/* Tap-to-change overlay */}
             <div
-              className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-all"
+              className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 active:opacity-100 transition-all"
               style={{ background: "rgba(0,0,0,0.6)" }}
             >
               <button
@@ -116,13 +114,13 @@ function ImageUploader({
             onClick={() => fileRef.current?.click()}
           >
             <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-3"
+              className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-2"
               style={{ background: `${primary}20` }}
             >
               {dragOver ? "📂" : "🖼️"}
             </div>
             <p className="text-sm font-medium" style={{ color: primary }}>
-              {dragOver ? "Drop to upload" : "Click or drag image here"}
+              {dragOver ? "Drop to upload" : "Tap or drag image here"}
             </p>
             <p className="text-xs text-gray-500 mt-1">
               JPG, PNG, WEBP — Max 5MB
@@ -143,15 +141,15 @@ function ImageUploader({
         )}
       </div>
 
-      {/* Upload Controls */}
-      <div className="p-4" style={{ background: "rgba(0,0,0,0.3)" }}>
+      {/* Controls */}
+      <div className="p-3 md:p-4" style={{ background: "rgba(0,0,0,0.3)" }}>
         {/* Mode tabs */}
         <div className="flex gap-2 mb-3">
           {["upload", "url"].map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
-              className="flex-1 py-1.5 rounded-lg text-xs font-medium capitalize transition"
+              className="flex-1 py-2 rounded-lg text-xs font-medium capitalize transition active:scale-95"
               style={
                 mode === m
                   ? {
@@ -178,13 +176,14 @@ function ImageUploader({
               ref={fileRef}
               type="file"
               accept="image/*"
+              capture="environment"
               className="hidden"
               onChange={(e) => handleFileUpload(e.target.files[0])}
             />
             <button
               onClick={() => fileRef.current?.click()}
               disabled={loading}
-              className="w-full py-2.5 rounded-xl text-sm font-medium transition disabled:opacity-50"
+              className="w-full py-2.5 rounded-xl text-sm font-medium transition disabled:opacity-50 active:scale-95"
               style={{
                 background: `${primary}20`,
                 color: primary,
@@ -203,12 +202,13 @@ function ImageUploader({
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               placeholder="https://example.com/image.jpg"
-              className="input-dark flex-1 rounded-xl px-3 py-2.5 text-xs"
+              inputMode="url"
+              className="input-dark flex-1 rounded-xl px-3 py-2.5 text-xs min-w-0"
             />
             <button
               onClick={handleUrlSave}
               disabled={loading || !urlInput}
-              className="px-4 py-2.5 rounded-xl text-xs font-medium transition disabled:opacity-50"
+              className="px-4 py-2.5 rounded-xl text-xs font-medium transition disabled:opacity-50 flex-shrink-0 active:scale-95"
               style={{ background: primary, color: "white" }}
             >
               Save
