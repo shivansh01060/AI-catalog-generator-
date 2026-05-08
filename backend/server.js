@@ -11,6 +11,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4173",
   "https://ai-catalog-generator-l9pp.vercel.app/",
+  "https://ai-catalog-generator-3.onrender.com",
 ];
 app.use(
   cors({
