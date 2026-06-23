@@ -7,6 +7,9 @@ import Catalog from "./pages/Catalog";
 import Templates from "./pages/Templates";
 import Analytics from "./pages/Analytics";
 import BulkGenerate from "./pages/BulkGenerate";
+import Reports from "./pages/Reports";
+import Team from "./pages/Team";
+import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useAuth } from "./context/AuthContext";
@@ -38,7 +41,7 @@ function App() {
           }
         />
         <Route
-          path="/add"
+          path="/products/add"
           element={
             <ProtectedRoute>
               <AddProduct />
@@ -46,10 +49,26 @@ function App() {
           }
         />
         <Route
-          path="/catalog"
+          path="/products/catalog"
           element={
             <ProtectedRoute>
               <Catalog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/templates"
+          element={
+            <ProtectedRoute>
+              <Templates />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/bulk"
+          element={
+            <ProtectedRoute>
+              <BulkGenerate />
             </ProtectedRoute>
           }
         />
@@ -62,18 +81,26 @@ function App() {
           }
         />
         <Route
-          path="/bulk"
+          path="/reports"
           element={
             <ProtectedRoute>
-              <BulkGenerate />
+              <Reports />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/templates"
+          path="/team"
           element={
             <ProtectedRoute>
-              <Templates />
+              <Team />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />

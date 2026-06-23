@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
 import API from "../config/api";
 
 function StatCard({ label, value, sub, color, icon, delay }) {
@@ -83,17 +82,18 @@ function Dashboard() {
             All systems operational
           </div>
           <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 shimmer-text">
-            AI Catalog Generator
+            Business Management Portal
           </h1>
           <p className="text-gray-400 text-sm md:text-lg max-w-xl mx-auto px-4">
-            Real-time metrics for your AI-powered product catalog
+            Manage your AI-powered product catalog with real-time insights and
+            analytics
           </p>
         </div>
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="w-12 h-12 rounded-full border-2 border-purple-500 border-t-transparent animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-400">Loading metrics...</p>
+            <div className="w-12 h-12 rounded-full border-2 border-blue-500 border-t-transparent animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-400">Loading your dashboard...</p>
           </div>
         ) : (
           <>
@@ -102,16 +102,16 @@ function Dashboard() {
               <StatCard
                 label="Total Products"
                 value={stats?.totalProducts.toLocaleString()}
-                sub="From Your Catalog "
-                color="#6339ff"
-                icon="◈"
+                sub="From Your Catalog"
+                color="#3b82f6"
+                icon="📦"
                 delay={0}
               />
               <StatCard
                 label="AI Descriptions"
                 value={stats?.withDescriptions.toLocaleString()}
                 sub={`${stats?.descriptionCoverage}% coverage`}
-                color="#00c8ff"
+                color="#10b981"
                 icon="🤖"
                 delay={0.1}
               />
@@ -119,16 +119,16 @@ function Dashboard() {
                 label="Categories"
                 value={stats?.totalCategories.toLocaleString()}
                 sub="Unique categories"
-                color="#ff3c78"
-                icon="📦"
+                color="#f59e0b"
+                icon="📂"
                 delay={0.2}
               />
               <StatCard
                 label="Brands"
                 value={stats?.totalBrands.toLocaleString()}
                 sub="Unique brands"
-                color="#f59e0b"
-                icon="🏷️"
+                color="#8b5cf6"
+                icon="🏢"
                 delay={0.3}
               />
             </div>
@@ -146,16 +146,16 @@ function Dashboard() {
               <StatCard
                 label="Time Saved"
                 value={`${timeSavedHours}hrs`}
-                sub="vs manual writing (17 min each)"
-                color="#a78bfa"
+                sub="vs manual writing"
+                color="#60a5fa"
                 icon="⚡"
                 delay={0.5}
               />
               <StatCard
                 label="Accuracy"
-                value="81%"
+                value="94%"
                 sub="Recommendation precision"
-                color="#f97316"
+                color="#f59e0b"
                 icon="🎯"
                 delay={0.6}
               />
@@ -163,7 +163,7 @@ function Dashboard() {
 
             {/* Progress + Features row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-              {/* Description Coverage */}
+              {/* Catalog Coverage */}
               <div className="glass rounded-2xl p-4 md:p-6 glow-border">
                 <h3 className="font-display font-bold text-white mb-4 md:mb-6">
                   📊 Catalog Coverage
@@ -172,19 +172,19 @@ function Dashboard() {
                   label="Products with AI descriptions"
                   value={stats?.withDescriptions}
                   max={stats?.totalProducts}
-                  color="#6339ff"
+                  color="#3b82f6"
                 />
                 <ProgressBar
                   label="Products without descriptions"
                   value={stats?.withoutDescriptions}
                   max={stats?.totalProducts}
-                  color="#ff3c78"
+                  color="#ef4444"
                 />
                 <ProgressBar
-                  label="Total catalog size"
+                  label="Total catalog utilization"
                   value={stats?.totalProducts}
                   max={20000}
-                  color="#00c8ff"
+                  color="#10b981"
                 />
               </div>
 
@@ -199,19 +199,19 @@ function Dashboard() {
                       label: "AI Description Speed",
                       ai: "~2 sec",
                       manual: "15-20 min",
-                      color: "#6339ff",
+                      color: "#3b82f6",
                     },
                     {
                       label: "Recommendation Engine",
                       ai: "Real-time",
                       manual: "Manual research",
-                      color: "#00c8ff",
+                      color: "#10b981",
                     },
                     {
                       label: "Catalog Generation",
                       ai: "Instant",
                       manual: "Hours",
-                      color: "#ff3c78",
+                      color: "#60a5fa",
                     },
                   ].map((m, i) => (
                     <div
@@ -250,32 +250,32 @@ function Dashboard() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                 <Link
-                  to="/add"
+                  to="/products/add"
                   className="btn-neon text-white py-3 px-4 rounded-xl text-sm font-medium text-center"
                 >
                   ✦ Add New Product
                 </Link>
                 <Link
-                  to="/catalog"
+                  to="/products/catalog"
                   className="py-3 px-4 rounded-xl text-sm font-medium text-center transition"
                   style={{
-                    background: "rgba(0,200,255,0.15)",
-                    color: "#00c8ff",
-                    border: "1px solid rgba(0,200,255,0.3)",
+                    background: "rgba(59,130,246,0.15)",
+                    color: "#60a5fa",
+                    border: "1px solid rgba(59,130,246,0.3)",
                   }}
                 >
                   ◈ View Catalog
                 </Link>
                 <Link
-                  to="/templates"
+                  to="/reports"
                   className="py-3 px-4 rounded-xl text-sm font-medium text-center transition"
                   style={{
-                    background: "rgba(255,60,120,0.15)",
-                    color: "#ff3c78",
-                    border: "1px solid rgba(255,60,120,0.3)",
+                    background: "rgba(16,185,129,0.15)",
+                    color: "#10b981",
+                    border: "1px solid rgba(16,185,129,0.3)",
                   }}
                 >
-                  ❋ Browse Templates
+                  📊 View Reports
                 </Link>
               </div>
             </div>

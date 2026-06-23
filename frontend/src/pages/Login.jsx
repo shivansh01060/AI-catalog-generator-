@@ -41,12 +41,12 @@ function Login() {
     <div className="mesh-bg min-h-screen flex items-center justify-center p-4">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 rounded-full opacity-10 blur-3xl"
-          style={{ background: "#6339ff" }}
+          className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 rounded-full opacity-8 blur-3xl"
+          style={{ background: "#1e40af" }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-56 md:w-80 h-56 md:h-80 rounded-full opacity-8 blur-3xl"
-          style={{ background: "#00c8ff" }}
+          className="absolute bottom-1/4 right-1/4 w-56 md:w-80 h-56 md:h-80 rounded-full opacity-6 blur-3xl"
+          style={{ background: "#3b82f6" }}
         />
       </div>
 
@@ -57,22 +57,22 @@ function Login() {
             <div
               className="w-10 h-10 md:w-12 md:h-12 rounded-2xl pulse-glow flex items-center justify-center"
               style={{
-                background: "linear-gradient(135deg, #6339ff, #00c8ff)",
+                background: "linear-gradient(135deg, #1e40af, #3b82f6)",
               }}
             >
               <span className="text-white font-bold text-base md:text-lg">
-                AI
+                BMP
               </span>
             </div>
             <span className="font-display font-bold text-xl md:text-2xl shimmer-text">
-              AICatalog
+              Business Portal
             </span>
           </div>
           <h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-2">
             Welcome back
           </h1>
           <p className="text-gray-400 text-sm">
-            Sign in to manage your AI product catalog
+            Sign in to your Business Management Portal
           </p>
         </div>
 
@@ -161,7 +161,7 @@ function Login() {
             <Link
               to="/register"
               className="font-bold transition hover:opacity-80"
-              style={{ color: "#a78bfa" }}
+              style={{ color: "#60a5fa" }}
             >
               Create one →
             </Link>
