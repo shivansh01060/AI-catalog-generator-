@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import Catalog from "./pages/Catalog";
 import Templates from "./pages/Templates";
-import Analytics from "./pages/analytics";
+import Analytics from "./pages/Analytics";
 import BulkGenerate from "./pages/BulkGenerate";
 import Reports from "./pages/Reports";
 import Team from "./pages/Team";
